@@ -4,6 +4,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building Vue app'
+                sh npm build
             }
         }
         stage('Test') {
