@@ -31,6 +31,10 @@ pipeline {
         stage ('Deploy') {
             steps {
                 echo "Deploy Vue to S3"
+                withAWS( region:'region-2', credentials:'VolkswagonJenkins'){
+                    sh 'echo "Uploading to s3"'
+                    s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'README.md', bucket:'chaofoam-poc-bucket')
+                }
             }
         }
     }
