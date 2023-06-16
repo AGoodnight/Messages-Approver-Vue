@@ -9,7 +9,7 @@ pipeline {
         // }
         stage('download dependencies') {
             agent { 
-                docker{
+                dockerContainer {
                     image 'node:latest'
                 }
             }
@@ -29,7 +29,7 @@ pipeline {
         }
         stage('Build') {
             agent { 
-                docker{
+                dockerContainer {
                     image 'node:latest'
                 }
             }
