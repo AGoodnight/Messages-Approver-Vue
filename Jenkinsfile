@@ -2,6 +2,7 @@ pipeline {
     // agent {
     //     dockerfile true
     // }
+    agent any
     stages {
         // stage('download dependencies') {
         //     steps {
