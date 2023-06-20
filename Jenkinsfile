@@ -1,38 +1,39 @@
 pipeline {
-    agent any
+    agent {
+        dockerfile true
+    }
     stages {
-        stage('download dependencies') {
-            agent { 
-                dockerContainer {
-                    image 'node:latest'
-                }
-            }
-            steps {
-                sh 'npm ci'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing Vue'
-            }
-        }
-        stage('Build') {
-            agent { 
-                dockerContainer {
-                    image 'node:latest'
-                }
-            }
-            steps {
-                echo 'Building Vue app'
-                sh 'npm build'
-            }
-        }
+        // stage('download dependencies') {
+        //     steps {
+        //         sh 'npm ci'
+        //     }
+        // }
+        // stage('Test') {
+        //     steps {
+        //         echo 'Testing Vue'
+        //     }
+        // }
+        // stage('Build') {
+        //     steps {
+        //         echo 'Building Vue app'
+        //         sh 'npm build'
+        //     }
+        // }
         stage ('Deploy') {
             steps {
                 echo "Deploy Vue to S3"
-                withAWS( region:'region-2', credentials:'DetroitLabsJenkins'){
+                // withCredentials([[
+                //     $class: 'AmazonWebServicesCredentialsBinding',
+                //     credentialsId: "DetroitLabsJenkins",
+                //     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                //     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                // ]]) {
+                //     // AWS Code
+                // }
+                withAwsCli( region:'region-2', credentials:'DetroitLabsJenkins'){
                     sh 'echo "Uploading to s3"'
-                    s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'README.md', bucket:'chaofoam-poc-bucket')
+                    sh 'aws s3 ls'
+                    // s3Upload(pathStyleAccessEnabled: true, payloadSigningEnabled: true, file:'README.md', bucket:'chaofoam-poc-bucket')
                 }
             }
         }
